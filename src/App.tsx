@@ -1,32 +1,34 @@
-import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { db } from './services/firebase';
-import { ref, set } from 'firebase/database';
-import logo from './logo.svg';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from 'react-router-dom'
+import Dashboard from './components/Dashboard';
+import Games from './components/Games';
+import Game from './components/Game';
+import GamePlay from './components/GamePlay';
+import NewGame from './components/NewGame';
+
 
 function App() {
-
-  const createGame = (id: string, name: string = `what-the-hull`) => {
-    console.log('setting...');
-    set(ref(db, `games/${id}`), {
-      name,
-      created: (new Date()).getTime(),
-    });
-  }
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </header>
+    <Router>
+      <ul>
+        <li><Link to="/">Dashboard</Link></li>
+        <li><Link to="/games">Games</Link></li>
+        <li><Link to="/games/new">New Game</Link></li>
+      </ul>
 
-      <button onClick={ () => createGame(uuidv4()) }>Create Game</button>
-
-    </div>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/games" element={<Games />} />
+        <Route path="/games/new" element={<NewGame />} />
+        <Route path="/games/:id" element={<Game />} />
+        <Route path="/games/:id/play" element={<GamePlay />} />
+      </Routes>
+    </Router>
   );
 }
 
